@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Globenest | Smart Travel Planner</title>
+    <meta name="description" content="Get smart, personalized travel recommendations with Globenest. Plan trips based on your interests, destination, and weather preferences.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css" />
@@ -21,16 +22,16 @@
   </head>
   <body class="bg-gradient-to-br from-blue-50 to-white text-gray-800 min-h-screen">
 
-    <!-- Hardcoded Navbar (from navbar.html) -->
+    <!-- Navbar -->
     <nav class="white z-depth-1">
       <div class="nav-wrapper container">
         <a href="../index.html" class="brand-logo">
           <iconify-icon icon="mdi:earth" width="24"></iconify-icon>
           <span style="color: #0014ee; font-weight: 700;">Globenest</span>
         </a>
-        <a href="#" data-target="mobile-nav" class="sidenav-trigger right">
+        <a href="#" data-target="mobile-nav" class="sidenav-trigger right" aria-label="Open navigation menu">
           <iconify-icon icon="mdi:menu" width="26"></iconify-icon>
-        </a>
+        </a>        
         <ul class="right hide-on-med-and-down nav-links">
           <li><a href="../index.html">Home</a></li>
           <li>
@@ -61,7 +62,7 @@
       <li>
         <ul class="collapsible collapsible-accordion">
           <li>
-            <a class="collapsible-header">Destination</a>
+            <a href="#!" class="collapsible-header">Destination</a>
             <div class="collapsible-body">
               <ul>
                 <li><a href="../destOne.html">Singapore</a></li>
@@ -82,96 +83,91 @@
       <p class="max-w-xl mx-auto text-gray-600">Get destination ideas and local activity insights tailored to your interests and preferences.</p>
     </section>
 
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 grid gap-10 grid-cols-1 md:grid-cols-2 pb-16">
 
-<!-- Main Content -->
-<main class="max-w-6xl mx-auto px-4 grid gap-10 grid-cols-1 md:grid-cols-2 pb-16">
+      <!-- Destination Finder -->
+      <section class="bg-white/60 backdrop-blur-md rounded-2xl shadow-xl p-8 animate-[fade-in-up_0.8s_ease-out]">
+        <h3 class="text-xl font-semibold text-gray-700 mb-6">Plan Your Destination</h3>
+        <form id="recommendationForm" class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="relative">
+              <label for="origin" class="text-sm font-medium text-gray-600">Where are you now?</label>
+              <input id="origin" type="text" placeholder="e.g., Charlotte" autocomplete="off"
+                class="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <ul id="origin-suggestions" class="absolute z-30 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow hidden max-h-64 overflow-auto text-sm"></ul>
+            </div>
+            <div class="relative">
+              <label for="location" class="text-sm font-medium text-gray-600">Where do you want to go?</label>
+              <input id="location" type="text" placeholder="e.g., Tokyo" autocomplete="off"
+                class="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <ul id="location-suggestions" class="absolute z-30 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow hidden max-h-64 overflow-auto text-sm"></ul>
+            </div>
+          </div>
 
-  <!-- Destination Finder -->
-  <section class="bg-white/60 backdrop-blur-md rounded-2xl shadow-xl p-8 animate-[fade-in-up_0.8s_ease-out]">
-    <h3 class="text-xl font-semibold text-gray-700 mb-6">Plan Your Destination</h3>
-    <form id="recommendationForm" class="space-y-6">
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="relative">
-          <label for="origin" class="text-sm font-medium text-gray-600">Where are you now?</label>
-          <input id="origin" type="text" placeholder="e.g., Charlotte" autocomplete="off"
-            class="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <ul id="origin-suggestions" class="absolute z-30 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow hidden max-h-64 overflow-auto text-sm"></ul>
+          <div>
+            <p class="text-sm font-medium text-gray-600 mb-2">What are you into?</p>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="activity" value="food" class="accent-blue-600">
+                <span>Food</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="activity" value="shopping" class="accent-blue-600">
+                <span>Shopping</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="activity" value="sightseeing" class="accent-blue-600">
+                <span>Sightseeing</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="activity" value="nature" class="accent-blue-600">
+                <span>Nature</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition duration-200 transform hover:scale-105">
+            Get Recommendations
+          </button>
+        </form>
+
+        <!-- Loading & Error States -->
+        <div id="loading" class="flex items-center gap-2 text-blue-600 text-sm mt-4 hidden">
+          <svg class="animate-spin h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z" />
+          </svg>
+          <span>Finding your ideal destination...</span>
         </div>
-        <div class="relative">
-          <label for="location" class="text-sm font-medium text-gray-600">Where do you want to go?</label>
-          <input id="location" type="text" placeholder="e.g., Tokyo" autocomplete="off"
-            class="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          <ul id="location-suggestions" class="absolute z-30 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow hidden max-h-64 overflow-auto text-sm"></ul>
+        <div id="error" class="text-red-600 text-sm mt-2"></div>
+
+        <section id="results" class="mt-6 space-y-4 text-sm text-gray-800">
+          <!-- JS will inject content here -->
+        </section>
+      </section>
+
+      <!-- Weather Tool -->
+      <section class="bg-white/60 backdrop-blur-md rounded-2xl shadow-xl p-8 animate-[fade-in-up_1s_ease-out]">
+        <h3 class="text-xl font-semibold text-gray-700 mb-6">Check Local Weather</h3>
+        <form id="weatherForm" class="space-y-4">
+          <div>
+            <label for="weatherLocation" class="text-sm font-medium text-gray-600">City</label>
+            <input id="weatherLocation" type="text" placeholder="e.g., Paris"
+              class="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          </div>
+          <button type="submit" class="w-full bg-green-800 hover:bg-green-900 text-white py-3 rounded-lg font-semibold transition duration-200 transform hover:scale-105">
+            Get Weather
+          </button>
+        </form>
+        <div id="weatherResult" class="text-sm text-gray-800 space-y-4 mt-4">
+          <!-- JS will inject content here -->
         </div>
-      </div>
+      </section>
+    </main>
 
-      <div>
-        <p class="text-sm font-medium text-gray-600 mb-2">What are you into?</p>
-        <div class="grid grid-cols-2 gap-3">
-          <label class="flex items-center gap-2">
-            <input type="checkbox" name="activity" value="food" class="accent-blue-600">
-            <span>Food</span>
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="checkbox" name="activity" value="shopping" class="accent-blue-600">
-            <span>Shopping</span>
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="checkbox" name="activity" value="sightseeing" class="accent-blue-600">
-            <span>Sightseeing</span>
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="checkbox" name="activity" value="nature" class="accent-blue-600">
-            <span>Nature</span>
-          </label>
-        </div>
-      </div>
-
-      <button type="submit"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition duration-200 transform hover:scale-105">
-        Get Recommendations
-      </button>
-    </form>
-
-    <!-- Loading & Error States -->
-    <div id="loading" class="flex items-center gap-2 text-blue-600 text-sm mt-4 hidden">
-      <svg class="animate-spin h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor"
-          d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z" />
-      </svg>
-      <span>Finding your ideal destination...</span>
-    </div>
-    <div id="error" class="text-red-600 text-sm mt-2"></div>
-
-    <!-- Result Card -->
-    <section id="results" class="mt-6 space-y-4 text-sm text-gray-800">
-      <!-- JS will inject content here -->
-    </section>
-  </section>
-
-  <!-- Weather Tool -->
-  <section class="bg-white/60 backdrop-blur-md rounded-2xl shadow-xl p-8 animate-[fade-in-up_1s_ease-out]">
-    <h3 class="text-xl font-semibold text-gray-700 mb-6">Check Local Weather</h3>
-    <form id="weatherForm" class="space-y-4">
-      <div>
-        <label for="weatherLocation" class="text-sm font-medium text-gray-600">City</label>
-        <input id="weatherLocation" type="text" placeholder="e.g., Paris"
-          class="w-full mt-1 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-      </div>
-      <button type="submit"
-        class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition duration-200 transform hover:scale-105">
-        Get Weather
-      </button>
-    </form>
-    <div id="weatherResult" class="text-sm text-gray-800 space-y-4 mt-4">
-      <!-- JS will inject content here -->
-    </div>
-  </section>
-</main>
-
-
-    <!-- Footer -->
     <footer class="text-center text-sm text-gray-500 py-6 border-t border-gray-200">
       &copy; <span id="year"></span> Globenest. All rights reserved.
     </footer>
@@ -186,6 +182,3 @@
     <script src="recommend.js"></script>
   </body>
 </html>
-
-
-
