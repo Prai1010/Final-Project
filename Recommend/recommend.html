@@ -22,8 +22,8 @@
   </head>
   <body class="bg-gradient-to-br from-blue-50 to-white text-gray-800 min-h-screen">
 
-    <!-- Navbar -->
-    <nav class="white z-depth-1">
+<!-- Navbar: Top navigation with dropdown and mobile menu -->
+  <nav class="white z-depth-1">
       <div class="nav-wrapper container">
         <a href="../index.html" class="brand-logo">
           <iconify-icon icon="mdi:earth" width="24"></iconify-icon>
@@ -31,10 +31,12 @@
         </a>
         <a href="#" data-target="mobile-nav" class="sidenav-trigger right" aria-label="Open navigation menu">
           <iconify-icon icon="mdi:menu" width="26"></iconify-icon>
-        </a>        
+        </a>
+        <!-- Desktop nav links -->        
         <ul class="right hide-on-med-and-down nav-links">
           <li><a href="../index.html">Home</a></li>
           <li>
+            <!-- Dropdown trigger for destinations -->
             <a class="dropdown-trigger" href="#!" data-target="destination-dropdown">
               Destination <iconify-icon icon="mdi:chevron-down" width="16"></iconify-icon>
             </a>
@@ -51,6 +53,7 @@
       <li><a href="../destTwo.html">New York City</a></li>
     </ul>
 
+        <!-- Mobile menu trigger -->
     <ul class="sidenav" id="mobile-nav">
       <li class="logo-mobile">
         <a href="../index.html" style="display: flex; align-items: center; gap: 8px; color: #0014ee;">

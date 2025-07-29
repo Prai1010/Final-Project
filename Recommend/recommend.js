@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // DOM element references
   const form = document.getElementById("recommendationForm");
   const resultsContainer = document.getElementById("results");
   const loadingIndicator = document.getElementById("loading");
@@ -7,9 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const weatherForm = document.getElementById("weatherForm");
   const weatherResult = document.getElementById("weatherResult");
 
+  // API Keys (note: these should be hidden in production)
   const geoapifyKey = "520559f8204a4dd0be7a7dda315ab318";
   const weatherApiKey = "cfb0d2e4fa7e44c08fc160524252407";
 
+  // Autocomplete input fields using Geoapify
   function setupAutocomplete(inputId, suggestionId) {
     const input = document.getElementById(inputId);
     const suggestionBox = document.getElementById(suggestionId);
@@ -19,22 +22,25 @@ document.addEventListener("DOMContentLoaded", () => {
       const query = input.value.trim();
       clearTimeout(timeoutId);
 
+      // Skip short input
       if (query.length < 2) {
         suggestionBox.innerHTML = "";
         suggestionBox.classList.add("hidden");
         return;
       }
 
+      // Debounce API calls by 300ms
       timeoutId = setTimeout(async () => {
         try {
           const res = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&limit=5&apiKey=${geoapifyKey}`);
           const data = await res.json();
-          if (!data.features || data.features.length === 0) {
+          if (!data.features?.length) {
             suggestionBox.innerHTML = "";
             suggestionBox.classList.add("hidden");
             return;
           }
 
+          // Populate suggestions
           suggestionBox.innerHTML = "";
           data.features.forEach(feature => {
             const city = feature.properties.city || feature.properties.name || feature.properties.address_line1;
@@ -60,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 300);
     });
 
+    // Hide suggestions if clicked elsewhere
     document.addEventListener("click", (e) => {
       if (!input.contains(e.target) && !suggestionBox.contains(e.target)) {
         suggestionBox.innerHTML = "";
@@ -71,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupAutocomplete("origin", "origin-suggestions");
   setupAutocomplete("location", "location-suggestions");
 
+  // Category tags mapped to Geoapify categories
   const categoryFallbacks = {
     food: ["catering.restaurant", "catering.fast_food", "catering.cafe"],
     shopping: ["commercial.shopping_mall", "commercial.department_store", "commercial.clothing"],
@@ -82,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     nature: ["leisure.park", "natural.water", "natural.forest", "leisure.picnic"]
   };
 
+  // Provide fallback names for places
   function getReadableName(place) {
     if (!place.name || /[^\u0000-\u00ff]/.test(place.name)) {
       return place.formatted || place.address_line1 || "Unnamed";
@@ -89,6 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return place.name;
   }
 
+  // Haversine formula to estimate distance between coordinates
   function haversineDistance(lat1, lon1, lat2, lon2) {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -100,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return R * c;
   }
 
+  // Travel recommendation form submit handler
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -112,10 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
     resultsContainer.innerHTML = "";
 
     try {
+      // Converts place name into lat/lon data
       const geocode = async (place) => {
         const res = await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(place)}&lang=en&apiKey=${geoapifyKey}`);
         const data = await res.json();
-        if (!data.features || data.features.length === 0) throw new Error("Geocode failed");
+        if (!data.features?.length) throw new Error("Geocode failed");
         const feature = data.features[0];
         return {
           lat: feature.geometry.coordinates[1],
@@ -129,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const origin = await geocode(originInput);
       const destination = await geocode(destinationInput);
 
+      // Tries several category fallbacks until one place is found
       async function fetchPlaceWithFallback(lat, lon, categories) {
         const fetches = categories.map(category => {
           const url = `https://api.geoapify.com/v2/places?categories=${category}&filter=circle:${lon},${lat},20000&limit=1&apiKey=${geoapifyKey}`;
@@ -143,6 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // Pull results for each selected activity
       const activityResults = await Promise.all(
         activities.map(async (activity) => {
           const fallbacks = categoryFallbacks[activity];
@@ -158,16 +172,18 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       const distance = haversineDistance(origin.lat, origin.lon, destination.lat, destination.lon);
-      const flightTime = (distance / 900).toFixed(1);
+      const flightTime = (distance / 900).toFixed(1); // 900km/h average jet speed
       const iata = {
         "Charlotte": "CLT", "Tokyo": "HND", "Paris": "CDG",
         "New York": "JFK", "Los Angeles": "LAX"
       };
 
+      // Create Google Flights URL if both airports are in list
       const flightURL = (iata[origin.name] && iata[destination.name])
         ? `https://www.google.com/flights?hl=en#flt=${iata[origin.name]}.${iata[destination.name]}`
         : null;
 
+      // Final result card
       const card = document.createElement("div");
       card.className = "bg-white/80 backdrop-blur-md rounded-xl p-6 shadow-lg border border-gray-200 animate-fadeIn";
       card.innerHTML = `
@@ -196,6 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Weather tool logic
   if (weatherForm) {
     weatherForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -216,6 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const { condition, temp_c, temp_f, wind_kph } = data.current;
         const temp = unit === "c" ? `${temp_c} °C` : `${temp_f} °F`;
 
+        // Show basic weather info
         weatherResult.innerHTML = `
           <div class="bg-white/80 backdrop-blur-md p-4 rounded-lg shadow-md">
             <h4 class="text-md font-semibold">${name}, ${country}</h4>
