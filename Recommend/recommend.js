@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const weatherResult = document.getElementById("weatherResult");
 
   // API Keys (note: these should be hidden in production)
-  const geoapifyKey = "520559f8204a4dd0be7a7dda315ab318";
-  const weatherApiKey = "cfb0d2e4fa7e44c08fc160524252407";
+  const geoapifyKey = "";
+  const weatherApiKey = "";
 
   // Autocomplete input fields using Geoapify
   function setupAutocomplete(inputId, suggestionId) {
